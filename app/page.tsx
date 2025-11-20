@@ -138,7 +138,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-5 pb-8 pt-5">
+      <div className="max-w-4xl mx-auto px-5 pb-28 pt-5">
         {/* Current Time and Date - iOS Widget Style */}
         <div className="bg-white dark:bg-[var(--ios-gray)] rounded-[20px] ios-shadow p-6 mb-4 overflow-hidden relative">
           <div className="relative z-10">
@@ -228,8 +228,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Safe area bottom spacing for iOS */}
-      <div className="h-8" />
     </div>
   );
 }
