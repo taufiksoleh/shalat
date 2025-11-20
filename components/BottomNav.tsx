@@ -9,38 +9,40 @@ interface NavItem {
   label: string
   href: string
   comingSoon?: boolean
+  badge?: boolean
 }
 
 const navItems: NavItem[] = [
   {
-    icon: '🕌',
-    label: 'Shalat',
+    icon: '☀️',
+    label: 'Hari ini',
     href: '/',
     comingSoon: false,
   },
   {
-    icon: '🧭',
-    label: 'Kiblat',
-    href: '/qibla',
-    comingSoon: true,
-  },
-  {
-    icon: '📿',
-    label: 'Tasbih',
-    href: '/tasbeeh',
+    icon: '🕌',
+    label: 'Sholat',
+    href: '/prayer',
     comingSoon: true,
   },
   {
     icon: '📖',
-    label: 'Quran',
+    label: "Al-Qur'an",
     href: '/quran',
     comingSoon: true,
   },
   {
-    icon: '⚙️',
-    label: 'Pengaturan',
-    href: '/settings',
+    icon: '🎥',
+    label: 'Video',
+    href: '/video',
     comingSoon: true,
+  },
+  {
+    icon: '👥',
+    label: 'Umat',
+    href: '/community',
+    comingSoon: true,
+    badge: true,
   },
 ]
 
@@ -48,30 +50,13 @@ export default function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <Tabbar labels icons className="fixed left-0 bottom-0 w-full">
+    <Tabbar
+      labels
+      icons
+      className="fixed left-0 bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800"
+    >
       {navItems.map((item) => {
         const isActive = pathname === item.href
-
-        if (item.comingSoon) {
-          return (
-            <TabbarLink
-              key={item.href}
-              active={false}
-              label={item.label}
-              icon={
-                <div className="relative">
-                  <div className="absolute -top-2 -right-2 bg-ios-blue text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap z-10">
-                    Segera
-                  </div>
-                  <div className="text-2xl opacity-60">
-                    {item.icon}
-                  </div>
-                </div>
-              }
-              onClick={(e) => e.preventDefault()}
-            />
-          )
-        }
 
         return (
           <Link key={item.href} href={item.href} className="contents">
@@ -79,10 +64,20 @@ export default function BottomNav() {
               active={isActive}
               label={item.label}
               icon={
-                <div className="text-2xl">
-                  {item.icon}
+                <div className="relative">
+                  {item.badge && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full z-10"></div>
+                  )}
+                  <div className={`text-2xl ${item.comingSoon ? 'opacity-40' : ''}`}>
+                    {item.icon}
+                  </div>
                 </div>
               }
+              onClick={(e) => {
+                if (item.comingSoon) {
+                  e.preventDefault()
+                }
+              }}
             />
           </Link>
         )
