@@ -35,11 +35,12 @@ export default function Home() {
     const fetchPrayerTimes = async () => {
       setLoading(true);
       try {
+        // Call Aladhan API directly with Kemenag calculation method
         const response = await fetch(
-          `/api/prayer-times?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}`
+          `https://api.aladhan.com/v1/timings?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&method=11`
         );
-        const data = await response.json();
-        setPrayerData(data);
+        const result = await response.json();
+        setPrayerData(result.data);
       } catch (error) {
         console.error("Error fetching prayer times:", error);
       } finally {
