@@ -43,12 +43,35 @@ Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
 ### Build untuk Production
 
 ```bash
-# Build aplikasi
+# Build aplikasi untuk static export
 npm run build
 
-# Jalankan production server
-npm start
+# Output akan tersimpan di folder 'out/'
 ```
+
+## 🚀 Deployment ke GitHub Pages
+
+Aplikasi ini sudah dikonfigurasi untuk deploy otomatis ke GitHub Pages menggunakan GitHub Actions.
+
+### Setup GitHub Pages:
+
+1. **Merge ke branch main**: Merge branch ini ke `main` atau sesuaikan workflow di `.github/workflows/deploy.yml`
+
+2. **Aktifkan GitHub Pages**:
+   - Buka repository di GitHub
+   - Pergi ke **Settings** → **Pages**
+   - Di bagian **Source**, pilih **GitHub Actions**
+
+3. **Deploy Otomatis**: Setiap push ke branch `main` akan otomatis trigger build dan deploy
+
+4. **Akses Aplikasi**: Setelah deployment selesai, aplikasi dapat diakses di:
+   ```
+   https://taufiksoleh.github.io/shalat/
+   ```
+
+### Manual Deployment:
+
+Jika ingin deploy secara manual, jalankan workflow dari tab **Actions** di GitHub repository.
 
 ## 🛠️ Teknologi
 
@@ -62,20 +85,22 @@ npm start
 
 ```
 shalat/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml           # GitHub Actions workflow
 ├── app/
-│   ├── api/
-│   │   └── prayer-times/
-│   │       └── route.ts          # API endpoint untuk prayer times
-│   ├── globals.css               # Global styles
-│   ├── layout.tsx                # Root layout
-│   └── page.tsx                  # Main page
+│   ├── globals.css              # Global styles
+│   ├── layout.tsx               # Root layout
+│   └── page.tsx                 # Main page
 ├── components/
-│   ├── LocationSelector.tsx      # Komponen pemilih kota
-│   └── PrayerCard.tsx           # Komponen kartu waktu shalat
+│   ├── LocationSelector.tsx     # Komponen pemilih kota
+│   └── PrayerCard.tsx          # Komponen kartu waktu shalat
 ├── lib/
-│   └── indonesian-cities.ts     # Data kota-kota Indonesia
+│   └── indonesian-cities.ts    # Data kota-kota Indonesia
+├── public/
+│   └── .nojekyll               # File untuk GitHub Pages
 ├── types/
-│   └── prayer.ts                # TypeScript types
+│   └── prayer.ts               # TypeScript types
 └── package.json
 ```
 
