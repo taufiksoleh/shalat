@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   title: "Jadwal Shalat Indonesia - Waktu Sholat Akurat",
@@ -33,6 +34,7 @@ export default function RootLayout({
     <html lang="id" className="smooth-scroll">
       <body className="antialiased overscroll-none">
         {children}
+        <BottomNav />
       </body>
     </html>
   );
