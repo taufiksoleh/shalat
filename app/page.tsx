@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Page, Navbar, Block, List, Card } from "konsta/react";
 import LocationSelector from "@/components/LocationSelector";
 import PrayerCard from "@/components/PrayerCard";
 import { City, PrayerTimesData, NextPrayer } from "@/types/prayer";
@@ -119,55 +120,46 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] smooth-scroll">
-      {/* iOS-style Large Title Header */}
-      <div className="sticky top-0 z-50 glass-effect border-b border-[var(--ios-separator)]">
-        <div className="max-w-4xl mx-auto">
-          {/* Status bar spacing */}
-          <div className="h-11" />
+    <Page className="pb-20">
+      <Navbar
+        title="Jadwal Shalat"
+        subtitle="Kementerian Agama RI"
+        large
+        transparent
+      />
 
-          {/* Navigation bar */}
-          <div className="px-5 pb-3">
-            <h1 className="text-[34px] font-bold leading-[41px] tracking-tight text-[var(--foreground)]">
-              Jadwal Shalat
-            </h1>
-            <p className="text-[13px] text-[var(--ios-gray-6)] mt-0.5 font-medium">
-              Kementerian Agama RI
-            </p>
+      {/* Current Time and Date Card */}
+      <Block strong inset className="space-y-4">
+        <Card className="p-6">
+          <div className="text-[56px] font-semibold leading-[64px] tabular-nums tracking-tight">
+            {formatTime(currentTime)}
           </div>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-5 pb-28 pt-5">
-        {/* Current Time and Date - iOS Widget Style */}
-        <div className="bg-white dark:bg-[var(--ios-gray)] rounded-[20px] ios-shadow p-6 mb-4 overflow-hidden relative">
-          <div className="relative z-10">
-            <div className="text-[56px] font-semibold leading-[64px] text-[var(--foreground)] tabular-nums tracking-tight">
-              {formatTime(currentTime)}
-            </div>
-            <div className="text-[15px] text-[var(--ios-gray-6)] mt-1 font-medium">
-              {formatDate(currentTime)}
-            </div>
-            {prayerData && (
-              <div className="mt-2 text-[13px] text-[var(--ios-gray-5)] font-medium">
-                {prayerData.date.hijri.date} {prayerData.date.hijri.month.en}{" "}
-                {prayerData.date.hijri.year} H
-              </div>
-            )}
+          <div className="text-[15px] text-gray-600 dark:text-gray-400 mt-1 font-medium">
+            {formatDate(currentTime)}
           </div>
-          {/* Decorative gradient */}
-          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-blue-400/10 to-teal-400/10 rounded-full blur-3xl" />
-        </div>
+          {prayerData && (
+            <div className="mt-2 text-[13px] text-gray-500 dark:text-gray-500 font-medium">
+              {prayerData.date.hijri.date} {prayerData.date.hijri.month.en}{" "}
+              {prayerData.date.hijri.year} H
+            </div>
+          )}
+        </Card>
+      </Block>
 
-        {/* Location Selector */}
-        <LocationSelector
-          selectedCity={selectedCity}
-          onCityChange={setSelectedCity}
-        />
+      {/* Location Selector */}
+      <Block strong inset>
+        <List>
+          <LocationSelector
+            selectedCity={selectedCity}
+            onCityChange={setSelectedCity}
+          />
+        </List>
+      </Block>
 
-        {/* Next Prayer Countdown - iOS Prominent Card */}
-        {nextPrayer && !loading && (
-          <div className="relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-[20px] ios-shadow p-6 mb-4">
+      {/* Next Prayer Countdown */}
+      {nextPrayer && !loading && (
+        <Block strong inset>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-6">
             <div className="relative z-10 text-white">
               <div className="text-[13px] font-semibold uppercase tracking-wider opacity-80 mb-3">
                 Waktu Shalat Selanjutnya
@@ -182,19 +174,20 @@ export default function Home() {
                 {nextPrayer.remaining} lagi
               </div>
             </div>
-            {/* Decorative elements */}
             <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
-          </div>
-        )}
+          </Card>
+        </Block>
+      )}
 
-        {/* Prayer Times List - iOS Inset Grouped List Style */}
-        {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-[3px] border-[var(--ios-blue)] border-t-transparent"></div>
-          </div>
-        ) : prayerData ? (
-          <div className="space-y-2.5">
+      {/* Prayer Times List */}
+      {loading ? (
+        <Block className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-[3px] border-ios-blue border-t-transparent"></div>
+        </Block>
+      ) : prayerData ? (
+        <Block strong inset>
+          <List strongIos insetIos>
             {Object.entries(prayerNames).map(([key, value]) => {
               const time = prayerData.timings[key as keyof typeof prayerData.timings];
               const isNext = nextPrayer?.name === value.id;
@@ -210,24 +203,23 @@ export default function Home() {
                 />
               );
             })}
-          </div>
-        ) : (
-          <div className="text-center py-10 text-[var(--ios-gray-6)] text-[15px]">
-            Gagal memuat jadwal shalat. Silakan coba lagi.
-          </div>
-        )}
+          </List>
+        </Block>
+      ) : (
+        <Block className="text-center py-10 text-gray-500 text-[15px]">
+          Gagal memuat jadwal shalat. Silakan coba lagi.
+        </Block>
+      )}
 
-        {/* Footer - iOS Style */}
-        <div className="mt-8 text-center">
-          <p className="text-[13px] text-[var(--ios-gray-5)] font-medium mb-1">
-            Metode perhitungan: Kementerian Agama Republik Indonesia
-          </p>
-          <p className="text-[11px] text-[var(--ios-gray-6)]">
-            Mohon sesuaikan dengan adzan masjid terdekat
-          </p>
-        </div>
-      </div>
-
-    </div>
+      {/* Footer */}
+      <Block className="text-center pb-8">
+        <p className="text-[13px] text-gray-500 font-medium mb-1">
+          Metode perhitungan: Kementerian Agama Republik Indonesia
+        </p>
+        <p className="text-[11px] text-gray-400">
+          Mohon sesuaikan dengan adzan masjid terdekat
+        </p>
+      </Block>
+    </Page>
   );
 }

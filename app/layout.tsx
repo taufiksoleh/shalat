@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import KonstaProvider from "@/components/KonstaProvider";
 import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
@@ -31,10 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="smooth-scroll">
-      <body className="antialiased overscroll-none">
-        {children}
-        <BottomNav />
+    <html lang="id">
+      <body className="antialiased">
+        <KonstaProvider>
+          {children}
+          <BottomNav />
+        </KonstaProvider>
       </body>
     </html>
   );
