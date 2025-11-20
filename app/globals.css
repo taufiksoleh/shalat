@@ -5,30 +5,12 @@
 :root {
   --background: #f2f2f7;
   --foreground: #000000;
-  --ios-gray: #f2f2f7;
-  --ios-gray-2: #e5e5ea;
-  --ios-gray-3: #d1d1d6;
-  --ios-gray-4: #c7c7cc;
-  --ios-gray-5: #aeaeb2;
-  --ios-gray-6: #8e8e93;
-  --ios-separator: rgba(60, 60, 67, 0.29);
-  --ios-blue: #007aff;
-  --ios-green: #34c759;
-  --ios-indigo: #5856d6;
-  --ios-teal: #5ac8fa;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #000000;
     --foreground: #ffffff;
-    --ios-gray: #1c1c1e;
-    --ios-gray-2: #2c2c2e;
-    --ios-gray-3: #3a3a3c;
-    --ios-gray-4: #48484a;
-    --ios-gray-5: #636366;
-    --ios-gray-6: #8e8e93;
-    --ios-separator: rgba(84, 84, 88, 0.65);
   }
 }
 
@@ -42,73 +24,10 @@ body {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  /* iOS Glass morphism */
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-  }
-
-  .glass-effect-dark {
-    background: rgba(28, 28, 30, 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-  }
-
-  /* iOS Card shadow */
-  .ios-shadow {
-    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04),
-                0 2px 4px rgba(0, 0, 0, 0.06),
-                0 8px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  .ios-shadow-sm {
-    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04),
-                0 1px 2px rgba(0, 0, 0, 0.06);
-  }
-
-  /* iOS Separator */
-  .ios-separator {
-    border-color: var(--ios-separator);
-  }
-
-  /* Smooth scrolling */
-  .smooth-scroll {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-  }
-
-  /* iOS List inset */
-  .ios-list-inset {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
   /* Tabular numbers for time display */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
-  }
-
-  /* Safe area padding for iOS devices */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .pt-safe {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  .pl-safe {
-    padding-left: env(safe-area-inset-left);
-  }
-
-  .pr-safe {
-    padding-right: env(safe-area-inset-right);
   }
 }
 
@@ -120,11 +39,6 @@ body {
 
 *::-webkit-scrollbar {
   display: none;
-}
-
-/* iOS-style selection */
-::selection {
-  background: rgba(0, 122, 255, 0.25);
 }
 
 /* Prevent text size adjustment on iOS */

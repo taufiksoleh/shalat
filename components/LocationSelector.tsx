@@ -1,5 +1,6 @@
 "use client";
 
+import { ListItem } from "konsta/react";
 import { City } from "@/types/prayer";
 import { indonesianCities } from "@/lib/indonesian-cities";
 
@@ -14,19 +15,14 @@ export default function LocationSelector({
 }: LocationSelectorProps) {
   return (
     <div className="w-full mb-4">
-      {/* iOS-style grouped list header */}
-      <div className="px-1 mb-2">
-        <span className="text-[13px] text-[var(--ios-gray-6)] font-semibold uppercase tracking-wide">
-          Lokasi
-        </span>
-      </div>
-
-      {/* iOS-style picker card */}
-      <div className="relative bg-white dark:bg-[var(--ios-gray)] rounded-[16px] ios-shadow-sm overflow-hidden">
-        <div className="flex items-center px-4 py-3">
-          {/* Location icon */}
+      <ListItem
+        link
+        chevronIos
+        title="Lokasi"
+        after={selectedCity.name}
+        media={
           <svg
-            className="w-6 h-6 text-[var(--ios-blue)] flex-shrink-0"
+            className="w-7 h-7 text-ios-blue"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -36,44 +32,23 @@ export default function LocationSelector({
               clipRule="evenodd"
             />
           </svg>
-
-          {/* Select element */}
-          <select
-            value={selectedCity.name}
-            onChange={(e) => {
-              const city = indonesianCities.find((c) => c.name === e.target.value);
-              if (city) onCityChange(city);
-            }}
-            className="flex-1 mx-3 bg-transparent border-0 text-[17px] font-medium
-                     text-[var(--foreground)] focus:outline-none cursor-pointer
-                     appearance-none leading-[22px] tracking-[-0.408px]"
-          >
-            {indonesianCities.map((city) => (
-              <option key={city.name} value={city.name}>
-                {city.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Chevron icon */}
-          <svg
-            className="w-5 h-5 text-[var(--ios-gray-4)] flex-shrink-0 pointer-events-none"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </div>
-
-        {/* iOS-style separator */}
-        <div className="absolute bottom-0 left-14 right-0 h-[0.5px] bg-[var(--ios-separator)]" />
-      </div>
+        }
+      >
+        <select
+          value={selectedCity.name}
+          onChange={(e) => {
+            const city = indonesianCities.find((c) => c.name === e.target.value);
+            if (city) onCityChange(city);
+          }}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        >
+          {indonesianCities.map((city) => (
+            <option key={city.name} value={city.name}>
+              {city.name}
+            </option>
+          ))}
+        </select>
+      </ListItem>
     </div>
   );
 }
