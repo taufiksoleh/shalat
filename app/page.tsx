@@ -141,150 +141,162 @@ export default function Home() {
   };
 
   return (
-    <Page className="bg-gradient-to-b from-teal-800 to-teal-900 pb-20">
+    <Page className="bg-gradient-to-br from-primary-50 via-white to-accent-50 pb-20">
       {/* Header Section */}
-      <div className="px-4 pt-3 pb-4">
-        <div className="flex items-center justify-between">
+      <div className="px-5 pt-4 pb-6">
+        <div className="flex items-center justify-between mb-6">
           {/* Profile Avatar */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center text-2xl shadow-soft">
               👤
             </div>
-            <div className="text-white">
-              <div className="text-lg font-semibold">
+            <div>
+              <div className="text-xs text-gray-500 font-medium">Hari Ini</div>
+              <div className="text-base font-bold text-gray-900">
                 {prayerData ? formatHijriDate() : "Loading..."}
               </div>
             </div>
           </div>
 
           {/* Action Icons */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1">
-              <span className="text-xl">⭐</span>
-              <span className="text-white text-sm font-semibold">6,7k</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full px-3.5 py-1.5 shadow-soft">
+              <span className="text-lg">⭐</span>
+              <span className="text-white text-sm font-bold">6.7k</span>
             </div>
-            <button className="text-2xl">🔔</button>
-            <button className="text-2xl">🎁</button>
+            <button className="w-10 h-10 rounded-full bg-white shadow-soft flex items-center justify-center text-xl hover:shadow-soft-lg transition-all">
+              🔔
+            </button>
+            <button className="w-10 h-10 rounded-full bg-white shadow-soft flex items-center justify-center text-xl hover:shadow-soft-lg transition-all">
+              🎁
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Prayer Time Cards */}
-      {!loading && prayerData && currentPrayer && nextPrayer && (
-        <div className="px-4 pb-4">
-          <div className="grid grid-cols-2 gap-3">
+        {/* Prayer Time Cards */}
+        {!loading && prayerData && currentPrayer && nextPrayer && (
+          <div className="grid grid-cols-2 gap-4 animate-slide-up">
             {/* Current Prayer Card */}
-            <Card className="bg-gradient-to-br from-teal-700 to-teal-800 border-0 rounded-3xl p-4">
-              <div className="text-white">
-                <div className="text-xs opacity-80 mb-1">• Sekarang</div>
-                <div className="text-2xl font-bold mb-1 flex items-center gap-2">
-                  {currentPrayer.name}
-                  <span className="text-xl">🌤️</span>
-                </div>
-                <div className="text-3xl font-bold tabular-nums">
-                  {currentPrayer.time}
-                </div>
+            <div className="modern-card p-5 bg-gradient-to-br from-primary-500 to-primary-600 text-white">
+              <div className="flex items-center gap-1.5 mb-2">
+                <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                <span className="text-xs font-medium opacity-90">Sekarang</span>
               </div>
-            </Card>
+              <div className="text-2xl font-bold mb-1 flex items-center gap-2">
+                {currentPrayer.name}
+                <span className="text-xl">🌤️</span>
+              </div>
+              <div className="text-3xl font-black tabular-nums">
+                {currentPrayer.time}
+              </div>
+            </div>
 
             {/* Next Prayer Card */}
-            <Card className="bg-gradient-to-br from-teal-700 to-teal-800 border-0 rounded-3xl p-4">
-              <div className="text-white">
-                <div className="text-xs opacity-80 mb-1">Selanjutnya</div>
-                <div className="text-2xl font-bold mb-1">{nextPrayer.name}</div>
-                <div className="text-xl font-bold tabular-nums">
-                  dalam {nextPrayer.remaining}
-                </div>
+            <div className="modern-card p-5 gradient-accent text-white">
+              <div className="text-xs font-medium opacity-90 mb-2">Selanjutnya</div>
+              <div className="text-2xl font-bold mb-1">{nextPrayer.name}</div>
+              <div className="text-xl font-bold tabular-nums">
+                dalam {nextPrayer.remaining}
               </div>
-            </Card>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Main Content Area */}
-      <div className="bg-white dark:bg-gray-900 rounded-t-[30px] min-h-screen pt-6">
+      <div className="bg-gradient-to-b from-white to-gray-50 dark:bg-gray-900 rounded-t-[32px] min-h-screen pt-8 shadow-soft-lg">
         {/* Features Section */}
-        <Block className="px-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Fitur Anda</h2>
-            <button className="text-sm text-teal-600 font-semibold flex items-center gap-1">
-              🔍 Semua fitur
+        <Block className="px-5">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Fitur Anda</h2>
+            <button className="text-sm text-primary-600 font-semibold flex items-center gap-1 hover:text-primary-700 transition-colors">
+              Semua <span className="text-base">→</span>
             </button>
           </div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-5 gap-4 mb-6">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-2xl">
+          <div className="grid grid-cols-5 gap-3 mb-8">
+            <button className="flex flex-col items-center gap-2.5 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 flex items-center justify-center text-2xl shadow-soft group-hover:shadow-soft-lg transition-all group-hover:-translate-y-1">
                 🧭
               </div>
-              <span className="text-xs text-center">Kiblat</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-2xl">
+              <span className="text-xs text-center font-medium text-gray-700 dark:text-gray-300">Kiblat</span>
+            </button>
+            <button className="flex flex-col items-center gap-2.5 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-success-100 to-success-200 dark:from-success-900 dark:to-success-800 flex items-center justify-center text-2xl shadow-soft group-hover:shadow-soft-lg transition-all group-hover:-translate-y-1">
                 🤲
               </div>
-              <span className="text-xs text-center">Doa-doa</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-2xl">
+              <span className="text-xs text-center font-medium text-gray-700 dark:text-gray-300">Doa</span>
+            </button>
+            <button className="flex flex-col items-center gap-2.5 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-100 to-accent-200 dark:from-accent-900 dark:to-accent-800 flex items-center justify-center text-2xl shadow-soft group-hover:shadow-soft-lg transition-all group-hover:-translate-y-1">
                 📿
               </div>
-              <span className="text-xs text-center">Tasbih</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-2xl">
+              <span className="text-xs text-center font-medium text-gray-700 dark:text-gray-300">Tasbih</span>
+            </button>
+            <button className="flex flex-col items-center gap-2.5 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900 dark:to-orange-800 flex items-center justify-center text-2xl shadow-soft group-hover:shadow-soft-lg transition-all group-hover:-translate-y-1">
                 💡
               </div>
-              <span className="text-xs text-center">Inspirasi</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-2xl">
+              <span className="text-xs text-center font-medium text-gray-700 dark:text-gray-300">Inspirasi</span>
+            </button>
+            <button className="flex flex-col items-center gap-2.5 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900 dark:to-indigo-800 flex items-center justify-center text-2xl shadow-soft group-hover:shadow-soft-lg transition-all group-hover:-translate-y-1">
                 📖
               </div>
-              <span className="text-xs text-center">Jurnal</span>
-            </div>
+              <span className="text-xs text-center font-medium text-gray-700 dark:text-gray-300">Jurnal</span>
+            </button>
           </div>
         </Block>
 
         {/* Explore More Section */}
-        <Block className="px-4">
-          <h3 className="text-lg font-bold mb-3">Jelajahi lebih luas</h3>
+        <Block className="px-5">
+          <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Jelajahi Lebih Luas</h3>
 
-          <div className="space-y-3">
-            <Card className="bg-gradient-to-r from-orange-500 to-yellow-500 border-0 rounded-2xl p-4">
+          <div className="space-y-4">
+            <button className="modern-card w-full bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 border-0 p-5 group">
               <div className="flex items-center justify-between text-white">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">🎮</span>
-                  <span className="font-semibold">Permainan Kuis Al-Qur&apos;an</span>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl backdrop-blur-sm">
+                    🎮
+                  </div>
+                  <span className="font-bold text-base">Kuis Al-Qur&apos;an</span>
                 </div>
-                <span className="text-2xl">→</span>
+                <span className="text-2xl group-hover:translate-x-1 transition-transform">→</span>
               </div>
-            </Card>
+            </button>
 
-            <Card className="bg-gradient-to-r from-teal-600 to-teal-700 border-0 rounded-2xl p-4">
+            <button className="modern-card w-full gradient-success border-0 p-5 group">
               <div className="flex items-center justify-between text-white">
-                <div>
-                  <span className="text-3xl">💰</span>
-                  <div className="mt-1 text-sm font-medium">
-                    Abadikan, kenangan, dan lacak<br />sedekah Anda di jurnal Anda hari ini
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl backdrop-blur-sm">
+                    💰
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-base mb-0.5">Jurnal Sedekah</div>
+                    <div className="text-xs opacity-90 font-medium">
+                      Catat & lacak amal Anda
+                    </div>
                   </div>
                 </div>
-                <span className="text-2xl">→</span>
+                <span className="text-2xl group-hover:translate-x-1 transition-transform">→</span>
               </div>
-            </Card>
+            </button>
           </div>
         </Block>
 
         {/* Prayer Times List */}
         {loading ? (
           <Block className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-[3px] border-teal-600 border-t-transparent"></div>
+            <div className="relative">
+              <div className="animate-spin rounded-full h-14 w-14 border-4 border-primary-200 border-t-primary-600"></div>
+              <div className="absolute inset-0 flex items-center justify-center text-xl">🕌</div>
+            </div>
           </Block>
         ) : prayerData ? (
-          <Block className="px-4 mt-6">
-            <h3 className="text-lg font-bold mb-3">Jadwal Shalat Hari Ini</h3>
-            <Card className="rounded-2xl p-4 space-y-3">
+          <Block className="px-5 mt-8">
+            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Jadwal Shalat Hari Ini</h3>
+            <div className="modern-card p-5 space-y-1">
               {Object.entries(prayerNames).map(([key, value]) => {
                 const time = prayerData.timings[key as keyof typeof prayerData.timings];
                 const isNext = nextPrayer?.name === value.id;
@@ -293,46 +305,60 @@ export default function Home() {
                 return (
                   <div
                     key={key}
-                    className={`flex items-center justify-between py-2 ${
-                      isNext || isCurrent ? "bg-teal-50 dark:bg-teal-900/20 rounded-xl px-3 -mx-1" : ""
+                    className={`flex items-center justify-between py-3.5 px-4 -mx-4 rounded-2xl transition-all ${
+                      isNext ? "bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/20 dark:to-accent-800/20" :
+                      isCurrent ? "bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{value.icon}</span>
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
+                        isNext ? "bg-accent-200 dark:bg-accent-800" :
+                        isCurrent ? "bg-primary-200 dark:bg-primary-800" :
+                        "bg-gray-100 dark:bg-gray-800"
+                      }`}>
+                        {value.icon}
+                      </div>
                       <div>
-                        <div className="font-semibold">{value.id}</div>
-                        <div className="text-xs text-gray-500">{value.ar}</div>
+                        <div className="font-bold text-base text-gray-900 dark:text-white">{value.id}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">{value.ar}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       {isNext && (
-                        <span className="bg-teal-600 text-white text-xs px-2 py-1 rounded-md font-semibold">
+                        <span className="gradient-accent text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow-soft">
                           Selanjutnya
                         </span>
                       )}
                       {isCurrent && (
-                        <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-md font-semibold">
+                        <span className="gradient-primary text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow-soft">
                           Sekarang
                         </span>
                       )}
-                      <span className="font-bold text-lg tabular-nums">{time}</span>
+                      <span className="font-black text-xl tabular-nums text-gray-900 dark:text-white">{time}</span>
                     </div>
                   </div>
                 );
               })}
-            </Card>
-            <div className="text-center mt-4 mb-8">
-              <p className="text-xs text-gray-500 font-medium mb-1">
-                📍 {selectedCity.name}
-              </p>
-              <p className="text-xs text-gray-400">
-                Metode perhitungan: Kementerian Agama RI
+            </div>
+            <div className="text-center mt-6 mb-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 rounded-full shadow-soft">
+                <span className="text-base">📍</span>
+                <span className="text-sm font-bold text-gray-900 dark:text-white">{selectedCity.name}</span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-3">
+                Metode: Kementerian Agama RI
               </p>
             </div>
           </Block>
         ) : (
-          <Block className="text-center py-10 text-gray-500 text-[15px]">
-            Gagal memuat jadwal shalat. Silakan coba lagi.
+          <Block className="text-center py-20">
+            <div className="text-6xl mb-4">😔</div>
+            <p className="text-gray-600 dark:text-gray-400 font-medium">
+              Gagal memuat jadwal shalat
+            </p>
+            <button className="mt-4 px-6 py-2.5 gradient-primary text-white rounded-full font-semibold shadow-soft hover:shadow-soft-lg transition-all">
+              Coba Lagi
+            </button>
           </Block>
         )}
       </div>

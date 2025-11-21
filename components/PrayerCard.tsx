@@ -1,11 +1,10 @@
 "use client";
 
-import { ListItem } from "konsta/react";
-
 interface PrayerCardProps {
   name: string;
   time: string;
   isNext: boolean;
+  isCurrent?: boolean;
   arabicName: string;
   icon: string;
 }
@@ -14,59 +13,71 @@ export default function PrayerCard({
   name,
   time,
   isNext,
+  isCurrent = false,
   arabicName,
   icon,
 }: PrayerCardProps) {
-  if (isNext) {
-    // Special highlighted card for next prayer
+  if (isNext || isCurrent) {
+    // Special highlighted card for next/current prayer
     return (
-      <div className="relative overflow-hidden rounded-2xl transition-all duration-200 bg-gradient-to-br from-green-500 to-teal-500 dark:from-green-600 dark:to-teal-600 shadow-lg scale-[1.02]">
-        <div className="px-4 py-4">
+      <div className={`
+        relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] shadow-soft-lg
+        ${isNext ? 'gradient-accent' : 'gradient-primary'}
+      `}>
+        <div className="px-5 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="text-[32px] leading-none flex-shrink-0 scale-110">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl">
                 {icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-[17px] leading-[22px] tracking-[-0.408px] text-white">
+                <h3 className="font-bold text-lg text-white">
                   {name}
                 </h3>
-                <p className="text-[13px] leading-[18px] mt-0.5 font-medium text-white/80">
+                <p className="text-sm text-white/90 font-medium">
                   {arabicName}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0 ml-3">
-              <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md">
-                <span className="text-white text-[11px] font-bold uppercase tracking-wide">
-                  Next
+            <div className="flex items-center gap-3 flex-shrink-0 ml-3">
+              <div className="bg-white/25 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+                <span className="text-white text-xs font-bold">
+                  {isNext ? 'Selanjutnya' : 'Sekarang'}
                 </span>
               </div>
-              <div className="text-[24px] font-semibold tabular-nums tracking-tight leading-none text-white">
+              <div className="text-2xl font-black tabular-nums text-white">
                 {time}
               </div>
             </div>
           </div>
         </div>
-        <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full blur-2xl" />
+        <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
       </div>
     );
   }
 
-  // Use Konsta UI ListItem for regular prayers
+  // Modern card for regular prayers
   return (
-    <ListItem
-      link
-      chevronIos
-      title={name}
-      subtitle={arabicName}
-      after={<span className="text-[20px] font-semibold tabular-nums text-ios-blue">{time}</span>}
-      media={
-        <div className="text-[28px] leading-none opacity-80">
-          {icon}
+    <div className="modern-card px-5 py-4 hover:shadow-soft-lg transition-all">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center text-2xl">
+            {icon}
+          </div>
+          <div>
+            <h3 className="font-bold text-base text-gray-900 dark:text-white">
+              {name}
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+              {arabicName}
+            </p>
+          </div>
         </div>
-      }
-    />
+        <div className="text-xl font-black tabular-nums text-gray-900 dark:text-white">
+          {time}
+        </div>
+      </div>
+    </div>
   );
 }
