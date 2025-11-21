@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Page, Block, Card } from "konsta/react";
+import { useEffect, useState, useCallback } from "react";
+import { Page, Block } from "konsta/react";
 import { City, PrayerTimesData, NextPrayer } from "@/types/prayer";
 import { indonesianCities } from "@/lib/indonesian-cities";
+import LocationPermissionPopup from "@/components/LocationPermissionPopup";
+import CitySelectorModal from "@/components/CitySelectorModal";
 
 const prayerNames = {
   Fajr: { id: "Subuh", ar: "الفجر", icon: "🌅" },
@@ -18,6 +20,9 @@ interface CurrentPrayer {
   time: string;
 }
 
+const LOCATION_STORAGE_KEY = "shalat_location";
+const LOCATION_ASKED_KEY = "shalat_location_asked";
+
 export default function Home() {
   const [selectedCity, setSelectedCity] = useState<City>(indonesianCities[0]);
   const [prayerData, setPrayerData] = useState<PrayerTimesData | null>(null);
@@ -25,6 +30,101 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [nextPrayer, setNextPrayer] = useState<NextPrayer | null>(null);
   const [currentPrayer, setCurrentPrayer] = useState<CurrentPrayer | null>(null);
+
+  // Location states
+  const [showLocationPopup, setShowLocationPopup] = useState(false);
+  const [showCitySelector, setShowCitySelector] = useState(false);
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [usingGPS, setUsingGPS] = useState(false);
+
+  // Helper to clean time string (remove timezone info like "(WIB)")
+  const cleanTime = (time: string) => time.split(" ")[0];
+
+  // Handle geolocation detection
+  const detectLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      alert("Geolocation tidak didukung oleh browser Anda");
+      setShowLocationPopup(false);
+      setShowCitySelector(true);
+      return;
+    }
+
+    setIsDetectingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+
+        // Create a custom location or find nearest city
+        const customCity: City = {
+          name: "Lokasi Saya",
+          latitude,
+          longitude,
+        };
+
+        // Save to localStorage
+        localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(customCity));
+        localStorage.setItem(LOCATION_ASKED_KEY, "true");
+
+        setSelectedCity(customCity);
+        setUsingGPS(true);
+        setIsDetectingLocation(false);
+        setShowLocationPopup(false);
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        setIsDetectingLocation(false);
+        setShowLocationPopup(false);
+
+        // Show city selector if permission denied
+        if (error.code === error.PERMISSION_DENIED) {
+          localStorage.setItem(LOCATION_ASKED_KEY, "true");
+          setShowCitySelector(true);
+        } else {
+          alert("Gagal mendeteksi lokasi. Silakan pilih kota secara manual.");
+          setShowCitySelector(true);
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000, // 5 minutes cache
+      }
+    );
+  }, []);
+
+  // Handle manual city selection
+  const handleCitySelect = useCallback((city: City) => {
+    localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(city));
+    localStorage.setItem(LOCATION_ASKED_KEY, "true");
+    setSelectedCity(city);
+    setUsingGPS(false);
+  }, []);
+
+  // Initialize location on first load
+  useEffect(() => {
+    const savedLocation = localStorage.getItem(LOCATION_STORAGE_KEY);
+    const locationAsked = localStorage.getItem(LOCATION_ASKED_KEY);
+
+    if (savedLocation) {
+      try {
+        const location = JSON.parse(savedLocation) as City;
+        setSelectedCity(location);
+        setUsingGPS(location.name === "Lokasi Saya");
+      } catch {
+        // Invalid saved location, show popup
+        if (!locationAsked) {
+          setShowLocationPopup(true);
+        }
+      }
+    } else if (!locationAsked) {
+      // First time user, show permission popup after a short delay
+      const timer = setTimeout(() => {
+        setShowLocationPopup(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Update current time every second
   useEffect(() => {
@@ -60,12 +160,15 @@ export default function Home() {
   useEffect(() => {
     if (!prayerData) return;
 
+    // Helper to clean time string (remove timezone info like "(WIB)")
+    const cleanTimeStr = (time: string) => time.split(" ")[0];
+
     const prayers = [
-      { name: "Subuh", time: prayerData.timings.Fajr, key: "Fajr" },
-      { name: "Dzuhur", time: prayerData.timings.Dhuhr, key: "Dhuhr" },
-      { name: "Ashar", time: prayerData.timings.Asr, key: "Asr" },
-      { name: "Maghrib", time: prayerData.timings.Maghrib, key: "Maghrib" },
-      { name: "Isya", time: prayerData.timings.Isha, key: "Isha" },
+      { name: "Subuh", time: cleanTimeStr(prayerData.timings.Fajr), key: "Fajr" },
+      { name: "Dzuhur", time: cleanTimeStr(prayerData.timings.Dhuhr), key: "Dhuhr" },
+      { name: "Ashar", time: cleanTimeStr(prayerData.timings.Asr), key: "Asr" },
+      { name: "Maghrib", time: cleanTimeStr(prayerData.timings.Maghrib), key: "Maghrib" },
+      { name: "Isya", time: cleanTimeStr(prayerData.timings.Isha), key: "Isha" },
     ];
 
     const now = currentTime;
@@ -110,7 +213,7 @@ export default function Home() {
       setNextPrayer({
         name: next.name,
         time: next.time,
-        remaining: minutesLeft < 60 ? `${minutesLeft}m` : `${hoursLeft}j ${minutesLeft}m`,
+        remaining: diff < 60 ? `${minutesLeft}m` : `${hoursLeft}j ${minutesLeft}m`,
       });
     } else {
       // After Isha, next prayer is Fajr tomorrow
@@ -123,7 +226,7 @@ export default function Home() {
       setNextPrayer({
         name: prayers[0].name,
         time: prayers[0].time,
-        remaining: `${hoursLeft}j ${minutesLeft}m`,
+        remaining: diff < 60 ? `${minutesLeft}m` : `${hoursLeft}j ${minutesLeft}m`,
       });
     }
 
@@ -298,7 +401,8 @@ export default function Home() {
             <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Jadwal Shalat Hari Ini</h3>
             <div className="modern-card p-5 space-y-1">
               {Object.entries(prayerNames).map(([key, value]) => {
-                const time = prayerData.timings[key as keyof typeof prayerData.timings];
+                const rawTime = prayerData.timings[key as keyof typeof prayerData.timings];
+                const time = cleanTime(rawTime);
                 const isNext = nextPrayer?.name === value.id;
                 const isCurrent = currentPrayer?.name === value.id;
 
@@ -341,11 +445,22 @@ export default function Home() {
               })}
             </div>
             <div className="text-center mt-6 mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 rounded-full shadow-soft">
-                <span className="text-base">📍</span>
+              <button
+                onClick={() => setShowCitySelector(true)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 rounded-full shadow-soft hover:shadow-soft-lg transition-all active:scale-95"
+              >
+                <span className="text-base">{usingGPS ? "📡" : "📍"}</span>
                 <span className="text-sm font-bold text-gray-900 dark:text-white">{selectedCity.name}</span>
-              </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-3">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {usingGPS && (
+                <p className="text-xs text-primary-600 dark:text-primary-400 font-medium mt-2">
+                  Menggunakan GPS
+                </p>
+              )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-2">
                 Metode: Kementerian Agama RI
               </p>
             </div>
@@ -362,6 +477,29 @@ export default function Home() {
           </Block>
         )}
       </div>
+
+      {/* Location Permission Popup */}
+      <LocationPermissionPopup
+        isOpen={showLocationPopup}
+        onClose={() => {
+          setShowLocationPopup(false);
+          localStorage.setItem(LOCATION_ASKED_KEY, "true");
+        }}
+        onAllowLocation={detectLocation}
+        onSelectManually={() => {
+          setShowLocationPopup(false);
+          setShowCitySelector(true);
+        }}
+        isLoading={isDetectingLocation}
+      />
+
+      {/* City Selector Modal */}
+      <CitySelectorModal
+        isOpen={showCitySelector}
+        onClose={() => setShowCitySelector(false)}
+        onSelectCity={handleCitySelect}
+        selectedCity={selectedCity}
+      />
     </Page>
   );
 }
